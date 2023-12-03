@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styling for table */
+        body{
+            background-image: url("https://bpm.costco.com/mum/contenthandler/mm/dav/filestore/login/bspace/images/login_background.png");
+        }
+        table {
+            background-color: aquamarine;
+            border-collapse: collapse;
+            width: 70%;
+            margin-top: 20px;
+            margin-left: 200px;
+        }
+
+        th, td {
+            border: 1px solid #0a1590;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(45deg, #d667ff, #e7b2e8);
+            font-style: italic;
+        }
+
+        .center
+        {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        background-color: #ccc;
+        border-radius: 3px;
+        }
+
+        /* Highlight selected rows */
+        .selected {
+            background-color: #d3d3d3;
+        }
+
+        /* Pagination styling */
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            border-radius: 2rem;
+            border: 0;
+          
+            color: #fff;
+            background: linear-gradient(135deg, #d63814 0%, #d5d8df 100%);
+            background-origin: border-box;
+            box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+          }
+          
+          .pagination button:focus {
+            box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1.5px rgba(4, 236, 101, 0.25), 0px 0px 0px 3.5px rgba(10, 220, 90, 0.984);
+            outline: 0;
+          }
+
+        /* Search bar styling */
+        .search-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            margin-left: 350px;
+            position: relative;
+        }
+
+        .search-container input {
+            padding: 8px;
+            width: 50%;
+        }
+
+        
+
+        .search-container button {
+            padding: 0.6em 2em;
+            border: none;
+            outline: none;
+            color: rgb(255, 255, 255);
+            background: #111;
+            cursor: pointer;
+            position: relative;
+            z-index: 0;
+            border-radius: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+          }
+          
+          .search-container button:before {
+            content: "";
+            background: linear-gradient(
+              45deg,
+              #ff0000,
+              #ff7300,
+              #fffb00,
+              #48ff00,
+              #00ffd5,
+              #002bff,
+              #7a00ff,
+              #ff00c8,
+              #ff0000
+            );
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            animation: glowing-button-85 20s linear infinite;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 10px;
+          }
+          
+          @keyframes glowing-button-85 {
+            0% {
+              background-position: 0 0;
+            }
+            50% {
+              background-position: 400% 0;
+            }
+            100% {
+              background-position: 0 0;
+            }
+          }
+          
+          .search-container button:after {
+            z-index: -1;
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #222;
+            left: 0;
+            top: 0;
+            border-radius: 10px;
+          }
+          
+
+        /* Delete selected button styling */
+        .delete-selected {
+            background-color: #ef4141;
+            margin-left: 180px;
+            border-radius: 100px;
+            box-shadow: rgba(187, 44, 44, 0.2) 0 -25px 18px -14px inset,rgba(187, 44, 44, 0.15) 0 1px 2px,rgba(187, 44, 44, 0.15) 0 2px 4px,rgba(187, 44, 44, 0.15) 0 4px 8px,rgba(187, 99, 44, 0.15) 0 8px 16px,rgba(187, 123, 44, 0.15) 0 16px 32px;
+            color: rgb(254, 254, 254);
+            cursor: pointer;
+            display: inline-block;
+            font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+            padding: 7px 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 250ms;
+            border: 0;
+            font-size: 16px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+          }
+          
+          .delete-selected:hover {
+            box-shadow: rgba(187, 44, 44, 0.35) 0 -25px 18px -14px inset,rgba(187, 101, 44, 0.25) 0 1px 2px,rgba(187, 101, 44, 0.25) 0 2px 4px,rgba(187, 44, 125, 0.25) 0 4px 8px,rgba(187, 44, 87, 0.25) 0 8px 16px,rgba(187, 44, 44, 0.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+          }
+        .selected-row {
+            background-color: #f2f2f2;
+        }
+        .currentPage {
+            color: #48ff00;
+        }
+        .ButtonsPL {
+            margin-left: 630px;
+        }
+          
+    </style>
+    <title>User Management Interface</title>
+</head>
+
+<body>
+    <div class="search-container">
+        <input type="text" placeholder="Search..." id="searchInput">
+        <button class="search-icon" onclick="searchUsers()">Search</button>
+    </div>
+
+        <table id="userTable">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll" onclick="selectAll()"></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- User data will be dynamically populated here -->
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <div class="delete-selected" onclick="deleteSelected()">Delete Selected</div>
+    <div class = "ButtonsPL">
+    <button class="first-page" onclick="renderTable(1)">First</button>
+    <button class="previous-page" onclick="renderTable(currentPageNumber-1)">Previous</button>
+    <span id="currentPage" class = "currentPage">Page 1</span>
+    <button class="next-page" onclick="renderTable(currentPageNumber+1)">Next</button>
+    <button class="last-page" onclick="renderTable(Math.ceil(userData.length / 10))">Last</button>
+    </div>
+    <div class="pagination" id="pagination">
+        <!-- Pagination buttons will be dynamically populated here -->
+    </div>
+    <br>
+
+    <script>
+        async function fetchData() {
+            try { 
+                const response = await fetch('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return [];
+            } 
+        }
+
+        // Function to initialize the table with fetched data
+        let userData = [];
+        let currentPageNumber = 1;
+        async function initializeTable() {
+            userData = await fetchData();
+            renderTable(userData,currentPageNumber);
+        }
+
+        // Function to render user data in the table
+        function renderTable(users, pageNumber = 1, searchTerm = '') {
+            // Clear previous data
+            const tableBody = document.querySelector('#userTable tbody');
+            tableBody.innerHTML = '';
+
+            // Filter data based on search term
+            const filteredData = userData.filter(user =>
+                user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.role.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            // Function to fetch data from the API
+
+            // Paginate data
+            const itemsPerPage = 10;
+            const startIndex = (pageNumber - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentPageData = filteredData.slice(startIndex, endIndex);
+
+            // Render rows in the table
+            currentPageData.forEach(user => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-id',user.id);
+                row.innerHTML = `
+                    <td><input type="checkbox" class="userCheckbox"></td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button class="edit" onclick="editUser(${user.id})">Edit</button>
+                        <button class="delete" onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                `;
+                // Add event listener for checkbox change to toggle the selected-row class
+            const checkbox = row.querySelector('.userCheckbox');
+            checkbox.addEventListener('change', () => {
+                row.classList.toggle('selected-row', checkbox.checked);
+        });
+
+                tableBody.appendChild(row);
+    });
+            currentPageNumber = pageNumber;
+            // Render pagination buttons
+            renderPaginationButtons(filteredData.length, itemsPerPage, pageNumber);
+            // Update the display of the current page
+            document.getElementById('currentPage').textContent = `Page ${currentPageNumber}`;
+
+            // Enable or disable Previous and Next buttons based on the current page
+            const previousButton = document.querySelector('.previous-page');
+            const nextButton = document.querySelector('.next-page');
+
+            previousButton.disabled = currentPageNumber === 1;
+            <!-- console.log(Math.ceil(filteredData.length / itemsPerPage)) -->
+            nextButton.disabled = currentPageNumber === ((Math.ceil(filteredData.length / itemsPerPage)));
+
+        }
+       
+        
+
+        // Function to render pagination buttons
+        function renderPaginationButtons(totalItems, itemsPerPage, currentPage) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const paginationElement = document.querySelector('#pagination');
+            paginationElement.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.onclick = () => renderTable(i);
+                paginationElement.appendChild(button);
+            }
+        }
+        document.querySelector('.first-page').addEventListener('click', () => renderTable(userData,1));
+        document.querySelector('.previous-page').addEventListener('click', () => renderTable(userData,currentPageNumber));
+        document.querySelector('.next-page').addEventListener('click', () => renderTable(userData,currentPageNumber));
+        document.querySelector('.last-page').addEventListener('click', () => renderTable(userData,Math.ceil(userData.length / 10)));
+        // Function to handle search
+        function searchUsers() {
+            const searchTerm = document.querySelector('#searchInput').value;
+            renderTable(userData,1, searchTerm);
+        }
+
+        // Function to handle user selection
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('.userCheckbox');
+            const selectAllCheckbox = document.querySelector('#selectAll');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+        // Function to handle deletion of selected users
+        function deleteSelected() {
+            const selectedRows = document.querySelectorAll('.selected-row');
+
+            selectedRows.forEach(row => {
+                const name = row.querySelector('td:nth-child(2)').textContent; // Get the name from the second column
+                const index = userData.findIndex(user => user.name === name);
+
+                if (index !== -1) {
+                    userData.splice(index, 1); // Remove the user from the array
+                }
+            });
+
+            // Re-render the table after deletion
+            renderTable(currentPageNumber);
+        }
+
+        // Function to handle editing user data
+        function editUser(userId) {
+            const row = document.querySelector(`tr[data-id="${userId}"]`);
+
+            if (!row) {
+                console.error('User not found for editing.');
+                return;
+            }
+
+            const nameCell = row.querySelector('td:nth-child(2)');
+            const emailCell = row.querySelector('td:nth-child(3)');
+            const editButton = row.querySelector('.edit');
+
+            // Toggle between editing and saving mode
+            if (!row.isEditing) {
+                // Enter edit mode
+                row.isEditing = true;
+
+                // Save original values
+                row.originalName = nameCell.textContent;
+                row.originalEmail = emailCell.textContent;
+
+                // Replace text content with input fields for editing
+                nameCell.innerHTML = `<input type="text" value="${row.originalName}">`;
+                emailCell.innerHTML = `<input type="text" value="${row.originalEmail}">`;
+
+                // Change button text to "Save"
+                editButton.textContent = 'Save';
+            } else {
+                // Exit edit mode
+                row.isEditing = false;
+
+                // Get the new values from the input fields
+                const newName = nameCell.querySelector('input').value;
+                const newEmail = emailCell.querySelector('input').value;
+
+                //Update displayed data
+                nameCell.textContent = newName;
+                emailCell.textContent = newEmail;
+
+                // Change button text back to "Edit"
+                editButton.textContent = 'Edit';
+            }
+        }
+
+        // Function to handle deletion of a user
+        function deleteUser(userId) {
+            const confirmed = confirm('Are you sure you want to delete this user?');
+                
+            if (confirmed) {
+                // Simulate deletion in memory
+                userData = userData.filter(user => user.id != userId);
+                console.log(userData);
+                    // Refresh table after deletion
+                renderTable(userData);
+                }
+            console.log(`Deleting user with ID ${userId}`);
+        }
+
+        document.getElementById('searchInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const searchTerm = document.querySelector('#searchInput').value;
+                renderTable(userData,1, searchTerm);
+            }
+        });
+
+
+        // Initial rendering of the table
+        initializeTable(1);
+    </script>
+</body>
+
+</html>
+
+
+
+
+
