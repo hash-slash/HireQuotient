@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- Written by Ashesh Saha  -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -202,13 +202,13 @@
 <body>
     <div class="search-container">
         <input type="text" placeholder="Search..." id="searchInput">
-        <button class="search-icon" onclick="searchUsers()">Search</button>
+            <button class="search-icon" onclick="searchUsers()">Search</button>
     </div>
 
         <table id="userTable">
         <thead>
             <tr>
-                <th><input type="checkbox" id="selectAll" onclick="selectAll()"></th>
+                <th><input type="checkbox" id="selectAllCheckbox" onclick="selectAll()"></th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Roles</th>
@@ -221,14 +221,14 @@
     </table>
     <br>
     <br>
-    <div class="delete-selected" onclick="deleteSelected()">Delete Selected</div>
-    <div class = "ButtonsPL">
-    <button class="first-page" onclick="renderTable(1)">First</button>
-    <button class="previous-page" onclick="renderTable(currentPageNumber-1)">Previous</button>
-    <span id="currentPage" class = "currentPage">Page 1</span>
-    <button class="next-page" onclick="renderTable(currentPageNumber+1)">Next</button>
-    <button class="last-page" onclick="renderTable(Math.ceil(userData.length / 10))">Last</button>
-    </div>
+        <div class="delete-selected" onclick="deleteSelected()">Delete Selected</div>
+        <div class = "ButtonsPL">
+            <button class="first-page" onclick="renderTable(1)">First</button>
+            <button class="previous-page" onclick="renderTable(userData,currentPageNumber-1)">Previous</button>
+            <span id="currentPage" class = "currentPage">Page 1</span>
+            <button class="next-page" onclick="renderTable(userData, currentPageNumber+1)">Next</button>
+            <button class="last-page" onclick="renderTable(userData, Math.ceil(userData.length / 10))">Last</button>
+        </div>
     <div class="pagination" id="pagination">
         <!-- Pagination buttons will be dynamically populated here -->
     </div>
@@ -267,8 +267,6 @@
                 user.role.toLowerCase().includes(searchTerm.toLowerCase())
             );
             
-            // Function to fetch data from the API
-
             // Paginate data
             const itemsPerPage = 10;
             const startIndex = (pageNumber - 1) * itemsPerPage;
@@ -308,7 +306,6 @@
             const nextButton = document.querySelector('.next-page');
 
             previousButton.disabled = currentPageNumber === 1;
-            <!-- console.log(Math.ceil(filteredData.length / itemsPerPage)) -->
             nextButton.disabled = currentPageNumber === ((Math.ceil(filteredData.length / itemsPerPage)));
 
         }
@@ -324,10 +321,11 @@
             for (let i = 1; i <= totalPages; i++) {
                 const button = document.createElement('button');
                 button.textContent = i;
-                button.onclick = () => renderTable(i);
+                button.onclick = () => renderTable(userData,i);
                 paginationElement.appendChild(button);
             }
         }
+        // Event Listeners for auxilliary buttons
         document.querySelector('.first-page').addEventListener('click', () => renderTable(userData,1));
         document.querySelector('.previous-page').addEventListener('click', () => renderTable(userData,currentPageNumber));
         document.querySelector('.next-page').addEventListener('click', () => renderTable(userData,currentPageNumber));
@@ -340,11 +338,17 @@
 
         // Function to handle user selection
         function selectAll() {
-            const checkboxes = document.querySelectorAll('.userCheckbox');
-            const selectAllCheckbox = document.querySelector('#selectAll');
-
-            checkboxes.forEach(checkbox => {
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const userCheckboxes = document.querySelectorAll('.userCheckbox');
+            
+            userCheckboxes.forEach(checkbox => {
                 checkbox.checked = selectAllCheckbox.checked;
+                const row = checkbox.closest('tr');
+                if (selectAllCheckbox.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
             });
         }
 
@@ -362,7 +366,7 @@
             });
 
             // Re-render the table after deletion
-            renderTable(currentPageNumber);
+            renderTable(userData,currentPageNumber);
         }
 
         // Function to handle editing user data
